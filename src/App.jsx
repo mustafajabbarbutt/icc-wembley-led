@@ -42,6 +42,7 @@ const PrayerTimesDisplay = () => {
   const [showAdhkaar, setShowAdhkaar] = useState(false);
   const [currentAdhkaar, setCurrentAdhkaar] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showPoster, setShowPoster] = useState(false);
 
   const getTodayKey = () => new Date().toISOString().split('T')[0];
   const todayTimes = PRAYER_TIMETABLE[getTodayKey()] || PRAYER_TIMETABLE['2026-04-29'];
@@ -49,6 +50,14 @@ const PrayerTimesDisplay = () => {
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Rotate between prayer times and poster every 5 seconds
+  useEffect(() => {
+    const rotationTimer = setInterval(() => {
+      setShowPoster((prev) => !prev);
+    }, 5000); // 5 seconds
+    return () => clearInterval(rotationTimer);
   }, []);
 
   useEffect(() => {
@@ -104,6 +113,19 @@ const PrayerTimesDisplay = () => {
   };
 
   if (!isAdmin) {
+    // Show parking poster
+    if (showPoster && !showAdhkaar) {
+      return (
+        <div className="min-h-screen bg-gradient-to-b from-[#0f1419] via-[#1a2332] to-[#0f1419] flex items-center justify-center p-4">
+          <img 
+            src="/parking-poster-1.jpg" 
+            alt="Event Day Parking Information" 
+            className="max-w-full max-h-screen object-contain rounded-3xl shadow-2xl"
+          />
+        </div>
+      );
+    }
+
     if (showAdhkaar) {
       const adhkaar = ADHKAAR[currentAdhkaar];
       return (
