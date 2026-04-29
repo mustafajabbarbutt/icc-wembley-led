@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 // Prayer times data from ICC Wembley April 2026 timetable
 const PRAYER_TIMETABLE = {
-  '2026-04-01': { fajr: '5:45', dhuhr: '1:30', asr: '6:15', maghrib: '7:37', isha: '9:00', fajrAdhan: '5:01', dhuhrAdhan: '1:10', asrAdhan: '5:31', maghribAdhan: '7:37', ishaAdhan: '8:52' },
-  '2026-04-02': { fajr: '5:45', dhuhr: '1:30', asr: '6:15', maghrib: '7:39', isha: '9:00', fajrAdhan: '4:59', dhuhrAdhan: '1:10', asrAdhan: '5:32', maghribAdhan: '7:39', ishaAdhan: '8:54' },
-  '2026-04-03': { fajr: '5:45', dhuhr: '1:30', asr: '6:30', maghrib: '7:41', isha: '9:15', fajrAdhan: '4:56', dhuhrAdhan: '1:10', asrAdhan: '5:33', maghribAdhan: '7:41', ishaAdhan: '8:55', jummah: '2:00' },
-  '2026-04-26': { fajr: '5:00', dhuhr: '1:30', asr: '7:15', maghrib: '8:19', isha: '9:45', fajrAdhan: '4:00', dhuhrAdhan: '1:04', asrAdhan: '5:59', maghribAdhan: '8:19', ishaAdhan: '9:28' },
-  '2026-04-27': { fajr: '5:00', dhuhr: '1:30', asr: '7:15', maghrib: '8:21', isha: '9:45', fajrAdhan: '3:58', dhuhrAdhan: '1:04', asrAdhan: '6:00', maghribAdhan: '8:21', ishaAdhan: '9:30' },
-  '2026-04-30': { fajr: '5:00', dhuhr: '1:30', asr: '7:15', maghrib: '8:26', isha: '9:45', fajrAdhan: '3:51', dhuhrAdhan: '1:04', asrAdhan: '6:03', maghribAdhan: '8:26', ishaAdhan: '9:34' }
+  '2026-04-01': { fajr: '5:45', dhuhr: '1:30', asr: '6:15', maghrib: '7:37', isha: '9:00', fajrAdhan: '5:01', dhuhrAdhan: '1:10', asrAdhan: '5:31', maghribAdhan: '7:37', ishaAdhan: '8:52', sunrise: '6:15', sunset: '7:37' },
+  '2026-04-27': { fajr: '5:00', dhuhr: '1:30', asr: '7:15', maghrib: '8:21', isha: '9:45', fajrAdhan: '3:58', dhuhrAdhan: '1:04', asrAdhan: '6:00', maghribAdhan: '8:21', ishaAdhan: '9:30', sunrise: '5:39', sunset: '8:21', jummah: '1:30' },
+  '2026-04-28': { fajr: '5:00', dhuhr: '1:30', asr: '7:15', maghrib: '8:22', isha: '9:45', fajrAdhan: '3:55', dhuhrAdhan: '1:04', asrAdhan: '6:01', maghribAdhan: '8:22', ishaAdhan: '9:31', sunrise: '5:37', sunset: '8:22' },
+  '2026-04-29': { fajr: '5:00', dhuhr: '1:30', asr: '7:15', maghrib: '8:24', isha: '9:45', fajrAdhan: '3:53', dhuhrAdhan: '1:04', asrAdhan: '6:02', maghribAdhan: '8:24', ishaAdhan: '9:32', sunrise: '5:39', sunset: '8:24' },
+  '2026-04-30': { fajr: '5:00', dhuhr: '1:30', asr: '7:15', maghrib: '8:26', isha: '9:45', fajrAdhan: '3:51', dhuhrAdhan: '1:04', asrAdhan: '6:03', maghribAdhan: '8:26', ishaAdhan: '9:34', sunrise: '5:39', sunset: '8:26' }
 };
 
 const ADHKAAR = [
@@ -34,7 +33,6 @@ const ADHKAAR = [
   }
 ];
 
-// Hijri date calculation (simplified)
 const getHijriDate = () => {
   return "11 Dhul Qa'dah 1447";
 };
@@ -46,7 +44,7 @@ const PrayerTimesDisplay = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const getTodayKey = () => new Date().toISOString().split('T')[0];
-  const todayTimes = PRAYER_TIMETABLE[getTodayKey()] || PRAYER_TIMETABLE['2026-04-27'];
+  const todayTimes = PRAYER_TIMETABLE[getTodayKey()] || PRAYER_TIMETABLE['2026-04-29'];
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -109,20 +107,18 @@ const PrayerTimesDisplay = () => {
     if (showAdhkaar) {
       const adhkaar = ADHKAAR[currentAdhkaar];
       return (
-        <div className="min-h-screen bg-gradient-to-b from-[#5C3333] via-[#4A2B2B] to-[#5C3333] text-white p-6">
+        <div className="min-h-screen bg-gradient-to-b from-[#1e3a5f] via-[#2c5282] to-[#1e3a5f] text-white p-6">
           <div className="max-w-4xl mx-auto">
-            {/* Logo */}
             <div className="text-center mb-6">
-              <img src="/logo.png" alt="ICC Wembley" className="w-64 h-64 mx-auto mb-4" />
-              <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: 'Georgia, serif', color: '#E8A857' }}>
+              <img src="/logo.png" alt="ICC Wembley" className="w-72 h-72 mx-auto mb-6 drop-shadow-2xl" />
+              <h1 className="text-5xl font-bold mb-2 text-[#E8A857]" style={{ fontFamily: 'Georgia, serif' }}>
                 Islamic Cultural Centre Wembley
               </h1>
             </div>
 
-            {/* Adhkaar Display */}
-            <div className="bg-gradient-to-r from-[#D86A5A] to-[#E07060] rounded-3xl p-12 shadow-2xl border-4 border-[#E8A857]">
+            <div className="bg-gradient-to-br from-[#E07060] to-[#D86A5A] rounded-3xl p-12 shadow-2xl border-4 border-[#89C5D4]">
               <div className="text-center mb-8">
-                <div className="bg-[#A8D5E2] text-[#4A2B2B] px-8 py-4 rounded-full text-2xl font-bold mb-6 inline-block">
+                <div className="bg-[#89C5D4] text-[#1e3a5f] px-8 py-4 rounded-full text-2xl font-bold mb-6 inline-block shadow-lg">
                   {adhkaar.titleEn}
                 </div>
               </div>
@@ -154,43 +150,52 @@ const PrayerTimesDisplay = () => {
     const hijriDate = getHijriDate();
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#1a1a1a] to-[#2d2d2d] p-4">
+      <div className="min-h-screen bg-gradient-to-b from-[#0f1419] via-[#1a2332] to-[#0f1419] p-4">
         <div className="max-w-4xl mx-auto">
           
-          {/* Top Header with Islamic Pattern */}
-          <div className="bg-gradient-to-r from-[#E8A857] via-[#D99A4A] to-[#E8A857] rounded-t-3xl p-6 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-20" style={{
-              backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)`
-            }}></div>
-            
-            <div className="relative z-10 flex justify-between items-center text-[#4A2B2B]">
-              <div className="text-xl font-bold">{hijriDate}</div>
+          {/* Logo - Big at Top */}
+          <div className="text-center mb-6">
+            <img 
+              src="/logo.png" 
+              alt="ICC Wembley" 
+              className="w-64 h-64 mx-auto mb-4 drop-shadow-2xl transform hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+
+          {/* Top Header with Modern Colors */}
+          <div className="bg-gradient-to-r from-[#E07060] via-[#D86A5A] to-[#E07060] rounded-3xl p-6 mb-4 shadow-2xl">
+            <div className="flex justify-between items-center text-white">
+              <div className="text-xl font-bold bg-white/20 px-6 py-3 rounded-2xl backdrop-blur-sm">
+                {hijriDate}
+              </div>
               
               <div className="text-center">
-                <div className="bg-[#4A2B2B] text-white rounded-2xl px-8 py-4 shadow-xl">
-                  <div className="text-6xl font-bold tracking-wider" style={{ fontFamily: 'Courier New, monospace' }}>
+                <div className="bg-[#1e3a5f] text-white rounded-2xl px-8 py-4 shadow-2xl border-2 border-[#89C5D4]">
+                  <div className="text-7xl font-bold tracking-wider" style={{ fontFamily: 'Courier New, monospace' }}>
                     {currentTimeFormatted}
                   </div>
-                  <div className="text-sm mt-1">{currentTime.getHours() >= 12 ? 'PM' : 'AM'}</div>
+                  <div className="text-sm mt-1 text-[#89C5D4]">{currentTime.getHours() >= 12 ? 'PM' : 'AM'}</div>
                 </div>
               </div>
               
-              <div className="text-xl font-bold">{currentDateEn}</div>
+              <div className="text-xl font-bold bg-white/20 px-6 py-3 rounded-2xl backdrop-blur-sm">
+                {currentDateEn}
+              </div>
             </div>
           </div>
 
-          {/* Quranic Header */}
-          <div className="bg-white py-4 border-b-4 border-[#D86A5A]">
+          {/* Quranic Header - Modern Style */}
+          <div className="bg-gradient-to-r from-[#89C5D4] to-[#A8D5E2] py-5 rounded-2xl mb-4 shadow-xl">
             <div className="text-center">
-              <p className="text-[#D86A5A] text-2xl font-bold mb-1">ESTABLISH THE PRAYER</p>
-              <p className="text-[#4A2B2B] text-xl" style={{ direction: 'rtl', fontFamily: 'Arial, sans-serif' }}>
+              <p className="text-[#1e3a5f] text-3xl font-bold mb-2">ESTABLISH THE PRAYER</p>
+              <p className="text-[#2c5282] text-2xl font-semibold" style={{ direction: 'rtl', fontFamily: 'Arial, sans-serif' }}>
                 إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنكَرِ
               </p>
             </div>
           </div>
 
           {/* Prayer Times Table Header */}
-          <div className="bg-gradient-to-r from-[#D86A5A] to-[#E07060] py-4 text-white">
+          <div className="bg-gradient-to-r from-[#E07060] to-[#D86A5A] py-5 text-white rounded-t-2xl shadow-xl">
             <div className="grid grid-cols-3 gap-4 px-8 text-center">
               <div className="text-3xl font-bold">SALAH</div>
               <div className="text-3xl font-bold">ADHAN</div>
@@ -198,8 +203,8 @@ const PrayerTimesDisplay = () => {
             </div>
           </div>
 
-          {/* Prayer Times */}
-          <div className="bg-[#E5E5E5]">
+          {/* Prayer Times - Modern Clean Design */}
+          <div className="bg-gradient-to-b from-[#1a2332] to-[#243447]">
             {[
               { nameEn: 'FAJR', nameAr: 'فجر', adhan: todayTimes.fajrAdhan, jamaat: todayTimes.fajr },
               { nameEn: 'DHUHR', nameAr: 'ظهر', adhan: todayTimes.dhuhrAdhan, jamaat: todayTimes.dhuhr },
@@ -208,32 +213,32 @@ const PrayerTimesDisplay = () => {
               { nameEn: 'ISHA', nameAr: 'عشاء', adhan: todayTimes.ishaAdhan, jamaat: todayTimes.isha },
               ...(todayTimes.jummah ? [{ nameEn: 'JUMMAH', nameAr: 'جمعه', adhan: '1:04', jamaat: todayTimes.jummah }] : [])
             ].map((prayer, idx) => (
-              <div key={idx} className="grid grid-cols-3 gap-4 border-b-2 border-white py-2">
-                {/* Prayer Name */}
-                <div className="bg-gradient-to-r from-[#E8A857] to-[#D99A4A] rounded-lg mx-2 px-4 py-6 flex flex-col justify-center items-center border-4 border-[#5C3333]">
-                  <div className="text-[#4A2B2B] text-3xl font-bold mb-1" style={{ direction: 'rtl' }}>
+              <div key={idx} className="grid grid-cols-3 gap-4 border-b-2 border-[#89C5D4]/20 py-3">
+                {/* Prayer Name - Modern Turquoise */}
+                <div className="bg-gradient-to-br from-[#89C5D4] to-[#A8D5E2] rounded-xl mx-2 px-4 py-6 flex flex-col justify-center items-center shadow-xl border-2 border-[#E8A857]">
+                  <div className="text-[#1e3a5f] text-3xl font-bold mb-1" style={{ direction: 'rtl' }}>
                     {prayer.nameAr}
                   </div>
-                  <div className="text-[#4A2B2B] text-3xl font-bold">
+                  <div className="text-[#2c5282] text-3xl font-bold">
                     {prayer.nameEn}
                   </div>
                 </div>
 
-                {/* Adhan Time */}
-                <div className="bg-[#1a1a1a] rounded-lg mx-2 flex items-center justify-center border-4 border-[#5C3333]">
-                  <div className="text-[#00FF00] text-6xl font-bold tracking-wider" style={{ 
+                {/* Adhan Time - Bright Cyan LED */}
+                <div className="bg-[#0a0e14] rounded-xl mx-2 flex items-center justify-center shadow-2xl border-2 border-[#00d9ff]/30">
+                  <div className="text-[#00d9ff] text-6xl font-bold tracking-wider" style={{ 
                     fontFamily: 'Courier New, monospace',
-                    textShadow: '0 0 10px rgba(0,255,0,0.5)'
+                    textShadow: '0 0 20px rgba(0,217,255,0.8), 0 0 40px rgba(0,217,255,0.4)'
                   }}>
                     {formatLEDTime(prayer.adhan)}
                   </div>
                 </div>
 
-                {/* Jamaat Time */}
-                <div className="bg-gradient-to-r from-[#D86A5A] to-[#E07060] rounded-lg mx-2 flex items-center justify-center border-4 border-[#5C3333]">
+                {/* Jamaat Time - Coral/Salmon */}
+                <div className="bg-gradient-to-br from-[#E07060] to-[#D86A5A] rounded-xl mx-2 flex items-center justify-center shadow-2xl border-2 border-[#E8A857]">
                   <div className="text-white text-6xl font-bold tracking-wider" style={{ 
                     fontFamily: 'Courier New, monospace',
-                    textShadow: '0 0 10px rgba(255,255,255,0.3)'
+                    textShadow: '0 0 15px rgba(255,255,255,0.5)'
                   }}>
                     {formatLEDTime(prayer.jamaat)}
                   </div>
@@ -242,11 +247,25 @@ const PrayerTimesDisplay = () => {
             ))}
           </div>
 
-          {/* Bottom Info */}
-          <div className="bg-[#4A2B2B] rounded-b-3xl py-4 px-6 text-center text-white">
-            <p className="text-xl mb-2">Islamic Cultural Centre Wembley</p>
-            <p className="text-lg text-[#E8A857]">72-74 Harrow Road, Wembley, HA9 6PL</p>
-            <p className="text-lg mt-2">Tel: 0208 903 3760 • www.iccwembley.co.uk</p>
+          {/* Sunrise & Sunset Section - Modern */}
+          <div className="bg-gradient-to-r from-[#E8A857] via-[#D99A4A] to-[#E8A857] rounded-b-2xl py-6 px-8 shadow-2xl">
+            <div className="grid grid-cols-2 gap-8">
+              {/* Sunrise */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center border-2 border-white/30">
+                <div className="text-[#1e3a5f] text-2xl font-bold mb-2">🌅 SUNRISE</div>
+                <div className="text-[#1e3a5f] text-5xl font-bold" style={{ fontFamily: 'Courier New, monospace' }}>
+                  {formatLEDTime(todayTimes.sunrise)}
+                </div>
+              </div>
+
+              {/* Sunset */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center border-2 border-white/30">
+                <div className="text-[#1e3a5f] text-2xl font-bold mb-2">🌇 SUNSET</div>
+                <div className="text-[#1e3a5f] text-5xl font-bold" style={{ fontFamily: 'Courier New, monospace' }}>
+                  {formatLEDTime(todayTimes.sunset)}
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -254,7 +273,6 @@ const PrayerTimesDisplay = () => {
     );
   }
 
-  // Simple Admin Panel
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <div className="max-w-4xl mx-auto">
@@ -264,7 +282,7 @@ const PrayerTimesDisplay = () => {
         </div>
         <div className="bg-gray-800 rounded p-6">
           <h2 className="text-2xl mb-4">Update Prayer Times</h2>
-          <p className="text-gray-400">Use this panel to adjust prayer times as needed.</p>
+          <p className="text-gray-400">Admin panel coming soon with full management features.</p>
         </div>
       </div>
     </div>
