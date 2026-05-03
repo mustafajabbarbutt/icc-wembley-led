@@ -32,7 +32,12 @@ const PrayerTimesDisplay = () => {
   const [currentAdhkaar, setCurrentAdhkaar] = useState(0);
   const [showPoster, setShowPoster] = useState(false);
   const [fadeState, setFadeState] = useState('fade-in');
-  const [isAdmin, setIsAdmin] = useState(false);
+  
+  // Check URL for admin parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const adminFromUrl = urlParams.get('admin') === 'true';
+  
+  const [isAdmin, setIsAdmin] = useState(adminFromUrl);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [password, setPassword] = useState('');
   const [adminSection, setAdminSection] = useState('dashboard');
@@ -84,6 +89,19 @@ const PrayerTimesDisplay = () => {
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Global keyboard shortcut for admin access
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setIsAdmin(true);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
   useEffect(() => {
@@ -606,12 +624,7 @@ const PrayerTimesDisplay = () => {
 
       <div className="absolute inset-0 geometric-pattern pointer-events-none"></div>
       
-      <div className="relative z-10 flex-1 flex flex-col p-4" onKeyDown={(e) => {
-        if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-          e.preventDefault();
-          setIsAdmin(true);
-        }
-      }} tabIndex="0">
+      <div className="relative z-10 flex-1 flex flex-col p-4">
         
         {makroohReason && (
           <div className="bg-gradient-to-r from-[#8B0000] via-[#A52A2A] to-[#8B0000] border-2 border-[#FFD700] rounded-2xl p-4 mb-3 shadow-2xl animate-pulse">
@@ -734,6 +747,17 @@ const PrayerTimesDisplay = () => {
                 {formatTime(todayTimes.sunset)}
               </div>
             </div>
+          </div>
+          
+          {/* Admin Access Button - Hidden but clickable */}
+          <div className="text-center mt-2">
+            <button
+              onClick={() => setIsAdmin(true)}
+              className="text-[#D4AF37]/30 hover:text-[#D4AF37] text-xs transition-all duration-300"
+              style={{ fontFamily: 'Lora, serif' }}
+            >
+              Admin
+            </button>
           </div>
         </div>
 
